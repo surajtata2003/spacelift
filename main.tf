@@ -1,48 +1,96 @@
 provider "aws" {
-  region = "ap-south-1"
+
+  region = var.aws_region
+
 }
-resource "aws_vpc-spacelift" "main_vpc" {
-  cidr_block           = "10.0.0.0/16"
+
+resource "aws_vpc" "main_vpc" {
+
+  cidr_block           = var.vpc_cidr
+
   enable_dns_support   = true
+
   enable_dns_hostnames = true
+
   tags = {
-    Name = "Terraform-VPC"
+
+    Name = var.vpc_name
+
   }
+
 }
-resource "aws_subnet-spacelift" "public_subnet" {
+
+resource "aws_subnet" "public_subnet" {
+
   vpc_id                  = aws_vpc.main_vpc.id
-  cidr_block              = "10.0.1.0/24"
+
+  cidr_block              = var.subnet_cidr
+
   map_public_ip_on_launch = true
-  availability_zone       = "ap-south-1a"
+
+  availability_zone       = var.availability_zone
+
   tags = {
-    Name = "Terraform-public-subnet"
+
+    Name = var.subnet_name
+
   }
+
 }
-resource "aws_internet_gateway_spacelift" "gw" {
+
+resource "aws_internet_gateway" "gw" {
+
   vpc_id = aws_vpc.main_vpc.id
+
   tags = {
-    Name = "Terraform-internet-gateway"
+
+    Name = var.igw_name
+
   }
+
 }
-resource "aws_route_table-spacelift" "public_rt" {
+
+resource "aws_route_table" "public_rt" {
+
   vpc_id = aws_vpc.main_vpc.id
+
   route {
+
     cidr_block = "0.0.0.0/0"
+
     gateway_id = aws_internet_gateway.gw.id
+
   }
+
   tags = {
-    Name = "Terraform-route-table"
+
+    Name = var.route_table_name
+
   }
+
 }
-resource "aws_route_table_association-138160-2" "public_assoc" {
+
+resource "aws_route_table_association" "public_assoc" {
+
   subnet_id      = aws_subnet.public_subnet.id
+
   route_table_id = aws_route_table.public_rt.id
+
 }
+
 resource "aws_s3_bucket" "terraform_bucket" {
-  bucket        = "138160-2-terraform-demo-bucket-assignment2"
+
+  bucket        = var.bucket_name
+
   force_destroy = true
+
   tags = {
-    Name        = "138160-2-Terraform-S3-bucket"
-    Environment = "Dev"
+
+    Name        = var.bucket_tag_name
+
+    Environment = var.environment
+
   }
+
 }
+ 
