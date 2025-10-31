@@ -41,7 +41,7 @@ variable "route_table_name" {
 variable "bucket_name" {
   description = "S3 bucket name (must be globally unique)"
   type        = string
-  default     = "terraform-demo-bucket-assignment2-138245"
+  default     = "terraform-demo-bucket-assignment3-138160"
 }
 variable "bucket_tag_name" {
   description = "Name tag for the S3 bucket"
