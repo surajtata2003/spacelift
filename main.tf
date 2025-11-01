@@ -70,7 +70,7 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
 
 # RDS Instance
 resource "aws_db_instance" "mysql_rds" {
-  identifier              = "terraform-mysql-db-v3"
+  identifier              = "terraform-mysql-db-v4" # Changed to force creation
   engine                  = "mysql"
   instance_class          = "db.t3.micro"
   allocated_storage       = 20
@@ -85,4 +85,3 @@ resource "aws_db_instance" "mysql_rds" {
     Name = "Terraform-MySQL-RDS"
   }
 }
-``
