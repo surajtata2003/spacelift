@@ -2,10 +2,17 @@ provider "aws" {
   region = "ap-south-1"
 }
 
+# Existing VPC
 data "aws_vpc" "existing_vpc" {
   id = "vpc-0f031bc0fd9d687a0"
 }
 
+# Existing Internet Gateway
+data "aws_internet_gateway" "existing_igw" {
+  id = "igw-07241ed380fe6c9fd"
+}
+
+# Subnets in two AZs
 resource "aws_subnet" "subnet_a" {
   vpc_id            = data.aws_vpc.existing_vpc.id
   cidr_block        = "10.0.1.0/24"
@@ -26,14 +33,7 @@ resource "aws_subnet" "subnet_b" {
   }
 }
 
-resource "aws_internet_gateway" "gw" {
-  vpc_id = data.aws_vpc.existing_vpc.id
-
-  tags = {
-    Name = "datasource-Terraform-internet-gateway"
-  }
-}
-
+# Security Group for RDS
 resource "aws_security_group" "rds_sg" {
   name        = "rds-sg"
   description = "Allow MySQL access"
@@ -58,6 +58,7 @@ resource "aws_security_group" "rds_sg" {
   }
 }
 
+# RDS Subnet Group
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "rds-subnet-group"
   subnet_ids = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id]
@@ -67,8 +68,9 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
   }
 }
 
+# RDS Instance
 resource "aws_db_instance" "mysql_rds" {
-  identifier              = "terraform-mysql-db-v2"
+  identifier              = "terraform-mysql-db-v3"
   engine                  = "mysql"
   instance_class          = "db.t3.micro"
   allocated_storage       = 20
@@ -83,3 +85,4 @@ resource "aws_db_instance" "mysql_rds" {
     Name = "Terraform-MySQL-RDS"
   }
 }
+``
