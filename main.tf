@@ -4,7 +4,7 @@ provider "aws" {
 
 # Get existing VPC
 data "aws_vpc" "existing_vpc" {
-  id = "vpc-07241ed380fe6c9fd"
+  id = "vpc-0f031bc0fd9d687a0"
 }
 
 # Subnet in ap-south-1a
